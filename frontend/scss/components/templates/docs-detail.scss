@@ -29,7 +29,7 @@ body {
     @include container;
     @media (min-width: 1024px) {
       max-width: none;
-      grid-template-columns: 240px minmax(100px, 1fr) 240px;
+      grid-template-columns: 254px minmax(100px, 1fr) 240px;
     }
   }
 
@@ -52,8 +52,8 @@ body {
     }    
   }
 
-  .#{utility('sidebar')} + .#{utility('content')},
-  .#{utility('toc')} + .#{utility('content')} {
+  .#{utility('sidebar')} ~ .#{utility('content')},
+  .#{utility('toc')} ~ .#{utility('content')} {
     @include content-with-sidebar;
     @media (min-width: 1024px) {
       grid-column: 2;
@@ -66,7 +66,7 @@ body {
     h3 {@include hl-h4;}
     h4 {@include hl-h5;}
 
-    @media (min-width: 1024px) {
+    @media (min-width: 1324px) {
 
       p,
       ul,
@@ -83,6 +83,7 @@ body {
 
       .ap-m-tip,
       .ap-m-code-snippet,
+      .ap-a-video,
       table {
         margin-left: 50px;
         margin-right: 50px;
@@ -91,6 +92,7 @@ body {
 
       table {
         display: table;
+        width: 100%;
       }
 
       tbody tr {
@@ -100,7 +102,18 @@ body {
         }
       }
 
-    } 
+    }
+
+    @media (min-width: 1730px) {
+      .ap-m-tip,
+      .ap-m-code-snippet,
+      .ap-a-video,
+      table {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 1000px;
+      }
+    }
 
     amp-anim {
       @include box-shadow;

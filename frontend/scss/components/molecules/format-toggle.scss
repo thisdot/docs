@@ -9,7 +9,6 @@
 .#{molecule('format-toggle')} {
   list-style: none;
   display: flex;
-  flex-wrap: wrap;
   margin: 0 10px;
   padding: 15px 0 0 0;
 
@@ -64,8 +63,6 @@
   }
 
   &-format {
-    flex: 1 50%;
-    max-width: 50%;
     padding: 2px;
   }
 
@@ -75,6 +72,7 @@
     align-items: center;
     position: relative;
     padding: 8px;
+    min-height: 44px;
     @include txt;
     @include txt-font-accent;
     line-height: 1.2em;
@@ -90,8 +88,15 @@
       font-size: 0.75em;
     }
 
+    div:last-child {
+      display: none;
+    }
+
     &.active {
       box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.25);
+      div:last-child {
+        display: block;
+      }
     }
 
     .#{atom('ico')} {
