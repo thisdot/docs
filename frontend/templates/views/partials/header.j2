@@ -22,6 +22,8 @@
     {% do doc.styles.addCssFile('/css/components/molecules/nav-link.css') %}
     <nav class="ap-o-header-main">
       {# Top level sections, defined by their top collection and landing page #}
+      {% set cache_key = 'navigation' + doc.locale.get_language_name() %}
+      {% if not doc.pod.amp_dev.template_cache.get(cache_key) %}
       {% set sections = [
         (g.collection('/content/amp-dev/about/'), g.doc('/content/amp-dev/about/websites.html', locale=doc.locale)),
         (g.collection('/content/amp-dev/documentation/'), g.doc('/content/amp-dev/documentation/guides-and-tutorials/index.html', locale=doc.locale)),
@@ -30,6 +32,10 @@
         ('external', ('Blog', 'https://blog.amp.dev')),
         (None, g.doc('/content/amp-dev/support/index.md', locale=doc.locale))
       ] %}
+      {% do doc.pod.amp_dev.template_cache.add(cache_key, sections %}
+      {% else %}
+      {% set sections = doc.pod.amp_dev.template_cache.get(cache_key) %}
+      {% endif %}
 
       {% for section, section_index in sections %}
       {% if section.flyout %}
