@@ -1,6 +1,7 @@
 ---
 $title: Create your first AMP Email
 $order: 0
+$category: 'fundamentals'
 tutorial: true
 formats:
   - email

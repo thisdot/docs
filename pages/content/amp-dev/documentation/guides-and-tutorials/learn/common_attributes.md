@@ -1,6 +1,7 @@
 ---
 $title: Common element attributes
 $order: 2
+$category: 'fundamentals'
 description: 'AMP provides a set of common attributes that are extended to many AMP components (and HTML elements). This document describes each of the common attributes.'
 toc: true
 ---

@@ -1,12 +1,10 @@
 ---
 $title: Include third-party content
 $order: 9
+$category: 'interactivity-dynamic-content'
 description: 'Learn how to include third-party components in your pages ...'
 formats:
     - websites
-components:
-  - iframe
-  - facebook
 author: Meggin
 contributors:
   - pbakaus

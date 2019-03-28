@@ -1,12 +1,13 @@
 ---
-$title: AMP for Email Fundamentals 
+$title: AMP for Email Fundamentals
 $order: 1
+$category: 'fundamentals'
 author: CrystalOnScript
 formats:
   - email
 ---
 
-If you're familiar with AMP, great news! AMP for Emails is just a subset of the AMP HTML library. If you're unfamiliar with AMP, also great news! This guide will give you everything you need to know to get started writing valid AMP Emails! 
+If you're familiar with AMP, great news! AMP for Emails is just a subset of the AMP HTML library. If you're unfamiliar with AMP, also great news! This guide will give you everything you need to know to get started writing valid AMP Emails!
 
 
 # Required Markup
@@ -50,9 +51,9 @@ Email providers who support AMP Emails have set up security checks to ensure use
 
 
 
-## AMP Specific Tag Replacements 
+## AMP Specific Tag Replacements
 
-Since the AMP for Email library is a subset of the AMP HTML library, many of the same rules apply; AMP specific tags replace resource heavy HTML tags and require a defined width and height. This allows the AMP boilerplate to hide content until it has an idea of how it looks on the user's device. 
+Since the AMP for Email library is a subset of the AMP HTML library, many of the same rules apply; AMP specific tags replace resource heavy HTML tags and require a defined width and height. This allows the AMP boilerplate to hide content until it has an idea of how it looks on the user's device.
 
 
 ### Images
@@ -61,9 +62,9 @@ To paint the page effectively, all `<img>` tags are replaced with [`<amp-img>`](
 
 
 ```
-<amp-img src="https://link/to/img.jpg" 
-    width="100" 
-    height="100" 
+<amp-img src="https://link/to/img.jpg"
+    width="100"
+    height="100"
     layout="responsive">
 </amp-img>
 ```
@@ -71,7 +72,7 @@ To paint the page effectively, all `<img>` tags are replaced with [`<amp-img>`](
 The `<amp-img>` tag comes with powerful, built-in ways to control responsive design and set fallbacks.
 
 [tip type="note"]
-    Read more about using the AMP [layout and media queries](https://amp.dev/documentation/guides-and-tutorials/develop/style_and_layout/control_layout.html?format=email) and how to set [image fallbacks](https://amp.dev/documentation/guides-and-tutorials/develop/style_and_layout/placeholders.html?format=email). 
+    Read more about using the AMP [layout and media queries](https://amp.dev/documentation/guides-and-tutorials/develop/style_and_layout/control_layout.html?format=email) and how to set [image fallbacks](https://amp.dev/documentation/guides-and-tutorials/develop/style_and_layout/placeholders.html?format=email).
 [/tip]
 
 ### GIFs
@@ -80,15 +81,15 @@ AMP has created [`<amp-anim>`](https://amp.dev/documentation/components/referenc
 
 
 ```
-<amp-anim 
-    width="400" 
-    height="300" 
+<amp-anim
+    width="400"
+    height="300"
     src="my-gif.gif">
 </amp-anim>
 ```
 
 
-Additionally, it supports an optional `placeholder` child to display while the `src` file is loading, and supports the AMP layout system. 
+Additionally, it supports an optional `placeholder` child to display while the `src` file is loading, and supports the AMP layout system.
 
 
 ```
@@ -100,7 +101,7 @@ Additionally, it supports an optional `placeholder` child to display while the `
 
 
 
-# Emails, with style 
+# Emails, with style
 
 Like all email clients, AMP allows for inline `style` attributes, but also supports CSS within the `<style amp-custom>` tag inside the head of the email.
 
@@ -121,9 +122,9 @@ Like all email clients, AMP allows for inline `style` attributes, but also suppo
 ```
 [tip type="important"]
     AMP enforces a size limit of 50,000 bytes for styling.
-[/tip]    
+[/tip]
 
-In Gmail, AMP email supports attributes and pseudo-classes disallowed in other email MIME types. 
+In Gmail, AMP email supports attributes and pseudo-classes disallowed in other email MIME types.
 
 
 ## Additional CSS Attributes
@@ -132,7 +133,7 @@ In Gmail, AMP email supports attributes and pseudo-classes disallowed in other e
 
 *   align-items
 *   box-shadow
-*   cursor 
+*   cursor
     *   only "initial" and "cursor" values are allowed
 *   justify-content
 *   overflow-wrap
@@ -141,10 +142,10 @@ In Gmail, AMP email supports attributes and pseudo-classes disallowed in other e
     *   bottom
     *   right
     *   left
-*   resize 
+*   resize
 *   visibility
     *   only "initial", "visible" and "hidden" values are allowed
-*   z-index 
+*   z-index
     *   only values from -100-100 are allowed
 
 
@@ -188,7 +189,7 @@ In Gmail, AMP email supports attributes and pseudo-classes disallowed in other e
 
 # Allowed AMP Components
 
-The dynamic, visual, and interactivity features of AMP components is what takes AMP Emails into the future of email. The AMP Email components sub-sect is divided into dynamic content and layout elements. 
+The dynamic, visual, and interactivity features of AMP components is what takes AMP Emails into the future of email. The AMP Email components sub-sect is divided into dynamic content and layout elements.
 
 
 ## Dynamic Content

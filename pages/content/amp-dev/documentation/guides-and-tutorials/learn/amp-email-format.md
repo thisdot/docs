@@ -2,6 +2,7 @@
 $title: AMP for Email specification
 author: fstanis
 $order: 3
+$category: 'fundamentals'
 formats:
   - email
 ---

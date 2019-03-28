@@ -1,6 +1,7 @@
 ---
 $title: Manage non-authenticated user state with AMP
 $order: 2
+$category: 'interactivity-dynamic-content'
 toc: false
 formats:
   - websites

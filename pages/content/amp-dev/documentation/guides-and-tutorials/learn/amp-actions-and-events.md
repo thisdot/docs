@@ -2,6 +2,7 @@
 $title: Actions and events
 toc: false
 $order: 7
+$category: 'interactivity-dynamic-content'
 formats:
   - websites
   - email

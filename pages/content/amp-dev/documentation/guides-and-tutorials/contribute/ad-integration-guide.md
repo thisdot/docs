@@ -1,6 +1,7 @@
 ---
 $title: Integrate your ad technologies into AMP
 $order: 3
+$category: 'advertising-analytics'
 formats:
   - ads
 ---

@@ -3,6 +3,7 @@ $view: /views/detail/docs-detail.j2
 $order: 5
 $localization:
   path: /{locale}/documentation/guides-and-tutorials/start/add_advanced/{base}.html
+$category: 'multimedia-animations'
 $title@: Add advanced AMP features
 $title@es: Añadir funciones avanzadas de AMP
 $title@id: Menambahkan fitur AMP lanjutan

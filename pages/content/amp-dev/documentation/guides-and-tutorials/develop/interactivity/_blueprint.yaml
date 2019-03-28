@@ -2,6 +2,7 @@ $path: /documentation/guides-and-tutorials/develop/interactivity/{base}.html
 $view: /views/detail/docs-detail.j2
 $localization:
   path: /{locale}/documentation/guides-and-tutorials/develop/interactivity/{base}.html
+$category: 'interactivity-dynamic-content'
 $title@: Create interactive AMP pages
 $title@zh: 创建互动式 AMP 网页
 $title@pt: Criação de páginas AMP interativas
@@ -13,7 +14,6 @@ $order: 100
 
 formats:
   - websites
-
 targeted: true
 chaptered: true
 tutorial: true

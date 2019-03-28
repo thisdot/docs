@@ -1,11 +1,10 @@
 ---
 $title: Include iframes
 $order: 10
+$category: 'interactivity-dynamic-content'
 description: Learn how to display include media content in your pages, and how to use iframes to display advanced content outside of AMP's limitations.
 formats:
     - websites
-components:
-  - iframe
 author: pbakaus
 contributors:
   - Meggin

@@ -4,10 +4,10 @@ $localization:
   path: /{locale}/documentation/guides-and-tutorials/develop/login_requiring/{base}.html
 $title@: Create a login-requiring AMP page
 $order: 101
+$category: 'interactivity-dynamic-content'
 
 targeted: true
 chaptered: true
 tutorial: true
-
 formats:
   - websites

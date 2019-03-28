@@ -3,6 +3,7 @@ $view: /views/detail/docs-detail.j2
 $order: 4
 $localization:
   path: /{locale}/documentation/guides-and-tutorials/start/converting/{base}.html
+$category: 'fundamentals'
 $title@: Convert HTML to AMP
 $title@es: Convertir HTML en AMP
 $title@id: Mengonversi HTML menjadi AMPHTML
@@ -10,8 +11,8 @@ $title@ja: HTML を AMP に変換する
 $title@ko: HTML을 AMP로 변환
 $title@pt: Converter HTML em AMP
 $title@zh: 将 HTML 网页转换成 AMP 网页
+
 chaptered: true
 tutorial: true
-
 formats:
   - websites

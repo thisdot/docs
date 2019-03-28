@@ -7,6 +7,7 @@ formats:
 $path: /documentation/guides-and-tutorials/develop/style_and_layout/style_and_layout.html
 $title: Style & layout
 $order: 0
+$category: 'style-layout'
 description: "Styling and layout on AMP HTML pages is very similar to normal HTML pages – in
 both cases, you'll use CSS."
 $hidden: true

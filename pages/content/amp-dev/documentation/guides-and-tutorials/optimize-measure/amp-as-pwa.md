@@ -1,6 +1,7 @@
 ---
 $title: Easy offline access and improved performance
 $order: 1
+$category: 'interactivity-dynamic-content'
 description: 'A Service Worker is a client-side proxy that sits between your page and your server, and is used to build fantastic offline experiences, fast-loading ...'
 formats:
   - websites
@@ -9,7 +10,7 @@ contributors:
   - pbakaus
 ---
 
-[Service workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) enable rich offline experiences and consistent user experiences across varying network strengths. By caching resources within the browser, a web app is able to provide data, assets, and offline pages to the user to keep them engaged and informed. 
+[Service workers](https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API) enable rich offline experiences and consistent user experiences across varying network strengths. By caching resources within the browser, a web app is able to provide data, assets, and offline pages to the user to keep them engaged and informed.
 
 Remember: The Service Worker won't be able to interact with the AMP-cached version of your page. Use it for onward journeys to your origin.
 
@@ -42,7 +43,7 @@ Then add the following somewhere within your `<body>` (modify to point to your a
 
 If the user navigates to your AMP pages on your origin (as opposed to the first click, which is usually served from an AMP Cache), the Service Worker will take over and can do a [myriad of cool things](https://developers.google.com/web/fundamentals/instant-and-offline/offline-ux).
 
-##The AMP Service Worker  
+##The AMP Service Worker
 
 If you're here, you're building pages with AMP. The AMP team cares immensely about putting the user first and giving them a world class web experience. To keep these experiences consistent the AMP team has created a service worker specifically for AMP!
 
@@ -54,7 +55,7 @@ If you're here, you're building pages with AMP. The AMP team cares immensely abo
 
 Install the AMP Service Worker with minimal steps:
 
-  - Import the AMP Service Worker code into your service worker file. 
+  - Import the AMP Service Worker code into your service worker file.
     [sourcecode:js]
       importScripts('https://cdn.ampproject.org/sw/amp-sw.js');
     [/sourcecode]
@@ -68,9 +69,9 @@ Install the AMP Service Worker with minimal steps:
 
 ### Automated Caching
 
-The AMP Service Worker automatically caches AMP script files and AMP documents. By caching AMP script files, they are instantly available to the users browser allowing for offline functionality and speedier pages on flaky networks. 
+The AMP Service Worker automatically caches AMP script files and AMP documents. By caching AMP script files, they are instantly available to the users browser allowing for offline functionality and speedier pages on flaky networks.
 
-If your app requires specific types of document caching, the AMP Service Worker allows for customization. Such as adding a deny list for documents that should always be requested from the network. 
+If your app requires specific types of document caching, the AMP Service Worker allows for customization. Such as adding a deny list for documents that should always be requested from the network.
 
 [sourcecode:js]
 AMP_SW.init(
@@ -82,9 +83,9 @@ AMP_SW.init(
 
 Read more about customizing document caching here.
 
-### Optimizing the AMP Service Worker 
+### Optimizing the AMP Service Worker
 
-To use the AMP Service Worker to its full capabilities, the optional fields should be configured to cache necessary assets and prefetch links. 
+To use the AMP Service Worker to its full capabilities, the optional fields should be configured to cache necessary assets and prefetch links.
 
 Assets that drive the user's visit to a page, such as a video, important images, or a downloadable PDF, should be cached so that they can be accessed again if the user is offline.
 
@@ -105,9 +106,9 @@ Links to pages your users may need to visit can be prefetched, allowing them to 
 <a href=`....` data-rel=`prefetch` />
 [/sourcecode]
 
-### Offline Experience 
+### Offline Experience
 
-Communicate to user's that they have gone offline, and should try reloading the site when back online, by including an offline page. The AMP Service Worker can cache both the page and its assets. 
+Communicate to user's that they have gone offline, and should try reloading the site when back online, by including an offline page. The AMP Service Worker can cache both the page and its assets.
 
 [sourcecode:js]
 AMP_SW.init({

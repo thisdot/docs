@@ -1,13 +1,13 @@
 ---
-formats:
-  - websites
-  - stories
 $title: Make your pages discoverable
 $titles:
   teaser: Make your pages discoverable
 $order: 3
+$category: 'interactivity-dynamic-content'
 description: 'In some cases, you might want to have both a non-AMP and an AMP version of the same page, for example, a news article. Consider this: If Google Search ...'
-
+formats:
+  - websites
+  - stories
 teaser:
   icon: discover
   text: Learn how search engines find out that there is an AMP version of your site.
