@@ -28,7 +28,6 @@
 {% block main %}
 {% do doc.styles.addCssFile('/css/components/organisms/preview-pane.css') %}
 <main class="ap--preview-pane">
-  {% if not doc.example.document.isAmpAds %}
   {% do doc.styles.addCssFile('/css/components/molecules/device-toggle.css') %}
   <div class="ap-m-device-toggle">
     {% set devices = ['mobile', 'tablet', 'desktop'] %}
@@ -42,7 +41,6 @@
     </button>
     {% endfor %}
   </div>
-  {% endif %}
 
   {% set base_class = 'ap-o-preview-pane ap-o-preview-pane-' + doc.formats[0] %}
   <div class="{{ base_class }} ap-o-preview-pane-mobile" [class]="'{{ base_class }} ap-o-preview-pane-' + device.selected">
@@ -71,7 +69,6 @@
   </div>
 </main>
 
-{% if not doc.example.document.isAmpAds %}
 <amp-state id="device">
   <script type="application/json">
     {
@@ -79,7 +76,6 @@
     }
   </script>
 </amp-state>
-{% endif %}
 {% endblock %}
 
 {% block footer %}

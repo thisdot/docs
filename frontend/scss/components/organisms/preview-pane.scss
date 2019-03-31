@@ -124,16 +124,10 @@
   &-ads {
 
     &.#{organism('preview-pane')} {
-      margin-top: 20px;
-      margin-bottom: 50px;
+      overflow-y: auto;
 
       amp-ad {
         margin-bottom: 10px;
-      }
-
-      &-mobile {
-        height: auto;
-        transform: scale(1);
       }
     }
   }
