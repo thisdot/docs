@@ -8,7 +8,8 @@ from grow.extensions import hooks
 
 
 class AssetBundle(object):
-    def __init__(self, doc):
+    def __init__(self, doc, cache):
+        self._cache = cache
         self._doc = doc
         # Used to determine where to print the finished styles
         self._placeholder = '/* {} */'.format(uuid.uuid4())
@@ -27,6 +28,23 @@ class AssetBundle(object):
         # Return empty string to not print None if used with {{ }}
         return ''
 
+    def _getFile(path, priority):
+        path = '{}/{}'.format(self._doc.pod.root, path)
+        contents = contents = self._cache.get(path)
+        # Check if there is a cached version
+        if contents and not self._doc.pod.podspec.env.name == 'development':
+            return contents
+
+        try:
+            with open(path, 'r') as file:
+                contents = file.read()
+                contents = contents.strip()
+        except IOError:
+            self._doc.pod.logger.error('Could not find {}'.format(path))
+
+        self._cache.add(path, contents)
+        return contents
+
     def emit(self):
         return self._placeholder
 
@@ -40,19 +58,11 @@ class AssetBundle(object):
         # Sort CSS files by priority
         self._files.sort(key=itemgetter(1))
 
-        base_path = self._doc.pod.root
         bundle = []
         # Try to get contents from files and concat them
         for path, priority in self._files:
-            path = '{}/{}'.format(base_path, path)
-            try:
-                with open(path, 'r') as file:
-                    file_contents = file.read()
-                    file_contents = file_contents.strip(' \t\n\r')
-
-                    bundle.append(file_contents)
-            except IOError:
-                self._doc.pod.logger.error('Could not find {}'.format(path))
+            contents = self._getFile(path, priority)
+            bundle.append(contents)
 
         bundle = ''.join(bundle)
         return content.replace(self._placeholder, bundle)
@@ -74,7 +84,7 @@ class InlineTextAssetsPreRenderHook(hooks.PreRenderHook):
     def trigger(self, previous_result, doc, raw_content, *_args, **_kwargs):
         # Create bundles and attach them to doc
         for config in self.extension.bundles:
-            bundle = AssetBundle(doc)
+            bundle = AssetBundle(doc, cache=self.extension.cache)
             # Expose AssetBundle.addFile via custom method name
             setattr(bundle, config['method'], bundle.addFile)
 
@@ -124,6 +134,7 @@ class InlineTextAssetsExtension(extensions.BaseExtension):
     def __init__(self, pod, config):
         super(InlineTextAssetsExtension, self).__init__(pod, config)
         self.bundles = config['bundles']
+        self.cache = pod.podcache.get_object_cache('text_assets');
 
     @property
     def available_hooks(self):
