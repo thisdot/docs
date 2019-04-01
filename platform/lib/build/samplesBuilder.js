@@ -133,7 +133,7 @@ class SamplesBuilder {
           // Build various documents and sources that are needed for Grow
           // to successfully render the example and for the playground
           const files = [
-            ...this._createDocumentation(sample, parsedSample),
+            this._createDocumentation(sample, parsedSample),
             ...this._buildRawSources(sample, parsedSample),
             ...this._createPreview(sample, parsedSample),
             ...this._renderEmbed(sample, parsedSample),
@@ -324,21 +324,19 @@ class SamplesBuilder {
           'path': `/{locale}${this._getDocumentationRoute(sample)}`,
         },
         'source': this._getSourceRoute(sample),
+        'formats': [this._getSampleFormat(parsedSample)],
+        'example': {
+          'filePath': parsedSample.filePath,
+          'document': parsedSample.document
+        },
+        'used_components': this._getUsedComponents(parsedSample),
+        'teaser': this._getTeaserData(parsedSample)
       }, {'lineWidth': 500}),
-      // Add example manually as constructors may not be quoted
-      `example: !g.json /${DOCUMENTATION_POD_PATH}/${manual.stem}.json`,
-      // ... and some additional information that is used by the example teaser
-      this._getTeaserData(parsedSample),
       '---',
     ].join('\n'));
     manual.extname = '.html';
 
-    // ... and the parsed sample as data source to render the manual
-    const data = manual.clone();
-    data.contents = Buffer.from(JSON.stringify(parsedSample));
-    data.extname = '.json';
-
-    return [manual, data];
+    return manual;
   }
 
   /**
@@ -350,7 +348,6 @@ class SamplesBuilder {
   _getTeaserData(parsedSample) {
     const teaserData = {};
     teaserData.formats = [this._getSampleFormat(parsedSample)];
-    teaserData.used_components = this._getUsedComponents(parsedSample);
 
     if (parsedSample.document.metadata.teaserImage) {
       teaserData.teaser = {'image': {
@@ -358,7 +355,7 @@ class SamplesBuilder {
       }};
     }
 
-    return yaml.safeDump(teaserData, {'lineWidth': 500});
+    return teaserData;
   }
 
   /**
@@ -514,7 +511,6 @@ class SamplesBuilder {
         'formats': [this._getSampleFormat(parsedSample)],
         'source': this._getSourceRoute(sample),
       }, {'lineWidth': 500}),
-      `example: !g.json /${DOCUMENTATION_POD_PATH}/${preview.stem}.json`,
       '---',
     ].join('\n'));
 

@@ -27,7 +27,7 @@
 {% do doc.styles.addCssFile('/css/components/molecules/device-toggle.css') %}
 <div class="ap-m-device-toggle">
   {% set devices = ['mobile', 'tablet', 'desktop'] %}
-  {% if doc.example.document.isAmpEmail %}
+  {% if doc.formats[0] == 'email' %}
   {% set devices = ['mobile', 'tablet'] %}
   {% endif %}
 

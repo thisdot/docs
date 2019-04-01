@@ -82,7 +82,7 @@
         <input class="ap-a-sidebar-toggle-input ap-a-sidebar-toggle-input-toc" type="checkbox" name="toc" id="toc" autocomplete="off">
         <ul>
           <li>
-            <a href="#{{ doc.example.document.title|slug }}">{{ doc.example.document.title }}</a>
+            <a href="#{{ doc.title|slug }}">{{ doc.title }}</a>
             <ul>
               <li>
                 {% for section in doc.example.document.sections %}
@@ -110,7 +110,7 @@
       </ul>
 
       {% include '/views/partials/breadcrumbs.j2' %}
-      <h1 class="ap--title" id="{{ doc.example.document.title|slug }}">{{ doc.example.document.title }}</h1>
+      <h1 class="ap--title" id="{{ doc.title|slug }}">{{ doc.title }}</h1>
 
       {# Render widget to toggle experiments if there are any #}
       {% set experiments = doc.example.document.metadata.experiments %}
