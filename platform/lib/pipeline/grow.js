@@ -72,7 +72,7 @@ class Grow {
    * @return {undefined}
    */
   _handleProcessOutput(data) {
-    data = data.toString();
+    data = data.toString().trim();
     this._log.running(data);
   }
 
