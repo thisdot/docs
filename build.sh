@@ -17,6 +17,27 @@
 # Exit if one of the below commands fails
 set -e
 
-cd platform && node build.js --clean-samples $*
-cd ../boilerplate && node build.js
-cd ../playground && webpack --config webpack.config.js --mode production --optimize-minimize --progress
+root=$(pwd)
+args=$*
+
+# Verify a valid NODE_ENV has been set for build
+if [ -z "$NODE_ENV" ]
+then
+  echo "You need to set a valid NODE_ENV variable to build amp.dev!"
+  exit 1
+fi
+
+# Only build boilerplate if configured via --boilerplate
+if [[ $args = *"boilerplate"* ]]
+then
+  echo "Building boilerplate ..."
+  cd $root/boilerplate && node build.js
+fi
+
+# Only build playground if configured via --playground
+if [[ $args = *"playground"* ]]
+then
+  cd $root && npm run build:playground
+fi
+
+cd $root/platform && node build.js --clean-samples $*

@@ -19,6 +19,8 @@
     "build:staging": "NODE_ENV=staging ./build.sh",
     "build:prod": "NODE_ENV=production ./build.sh",
 
+    "build:playground": "cd playground && webpack --config webpack.config.js --mode production --optimize-minimize --progress",
+
     "deploy:staging": "gcloud app deploy --project=amp-dev-staging --quiet",
     "deploy:prod": "gcloud app deploy --project=amp-dev-230314 --quiet",
 

@@ -6,13 +6,32 @@ git:
 cache:
   - pip
   - npm
+before_install:
+- openssl aes-256-cbc -K $encrypted_d4a09416a845_key -iv $encrypted_d4a09416a845_iv
+  -in .staging.key.json.enc -out .staging.key.json -d
 install:
   - pip install grow==0.7.4 --user
   - grow --version
-  - which grow
   - npm ci
-before_deploy:
-  - npm run build:staging
+
+jobs:
+  include:
+    - stage: build
+      script:
+        - ./build.sh --locales en,fr,ar --playground --boilerplate
+    - stage: build
+      script:
+        - ./build.sh --locales es,it,id
+    - stage: build
+      script:
+        - ./build.sh --locales ja,ko,pt_BR
+    - stage: build
+      script:
+        - ./build.sh --locales ru,tr,zh_CN
+    - stage: deploy
+      install:
+        - pip install gsutil --user
+
 deploy:
   provider: gae
   keyfile: ".staging.key.json"
@@ -20,6 +39,3 @@ deploy:
   skip_cleanup: true
   on:
     branch: future
-before_install:
-- openssl aes-256-cbc -K $encrypted_d4a09416a845_key -iv $encrypted_d4a09416a845_iv
-  -in .staging.key.json.enc -out .staging.key.json -d
