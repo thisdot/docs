@@ -32,30 +32,29 @@ jobs:
       name: 'Build Pages (EN, FR, AR)'
       install:
         - npm ci
-        - pip install grow==0.7.4 --user -q -q
+        - pip install grow==0.7.4 --user
       script:
-        - unbuffer npm run build:staging -- --locales en
-        # - npm run build:staging -- --locales en,fr,ar
-    # - stage: build
-    #   name: 'Build Pages (ES, IT, ID)'
-    #   install:
-    #     - npm ci
-    #     - pip install grow==0.7.4 --user -q -q
-    #   script:
-    #     - npm run build:staging -- --locales es,it,id
-    # - stage: build
-    #   name: 'Build Pages (JA, KO, PT)'
-    #   install:
-    #     - npm ci
-    #     - pip install grow==0.7.4 --user -q -q
-    #   script:
-    #     - npm run build:staging -- --locales ja,ko,pt_BR
-    # - stage: build
-    #   name: 'Build Pages (RU, TR, CN)'
-    #   install:
-    #     - npm ci
-    #     - pip install grow==0.7.4 --user -q -q
-    #   script:
-    #     - npm run build:staging -- --locales ru,tr,zh_CN
+        - unbuffer npm run build:staging -- --locales en,fr,ar
+    - stage: build
+      name: 'Build Pages (ES, IT, ID)'
+      install:
+        - npm ci
+        - pip install grow==0.7.4 --user
+      script:
+        - unbuffer npm run build:staging -- --locales es,it,id
+    - stage: build
+      name: 'Build Pages (JA, KO, PT)'
+      install:
+        - npm ci
+        - pip install grow==0.7.4 --user
+      script:
+        - unbuffer npm run build:staging -- --locales ja,ko,pt_BR
+    - stage: build
+      name: 'Build Pages (RU, TR, CN)'
+      install:
+        - npm ci
+        - pip install grow==0.7.4 --user
+      script:
+        - unbuffer npm run build:staging -- --locales ru,tr,zh_CN
     - stage: deploy
       script: unbuffer ./scripts/deploy.sh
