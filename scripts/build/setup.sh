@@ -79,7 +79,7 @@ if [ -n "$TRAVIS_BUILD_NUMBER" ]; then
   mkdir -p artifacts
 
   # ZIP artifacts to speed up transfer
-  zip -r artifacts/setup.zip pages/content dist boilerplate/dist playground/dist .cache
+  zip -r artifacts/setup.zip pages/content dist boilerplate/dist playground/dist .cache examples/static/samples/samples.json
   gsutil cp $root/artifacts/setup.zip gs://us.artifacts.amp-dev-staging.appspot.com/travis/$TRAVIS_BUILD_NUMBER/setup.zip
   echo -e "travis_fold:end:store\n"
 fi
