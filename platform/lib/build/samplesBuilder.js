@@ -127,6 +127,7 @@ class SamplesBuilder {
       // Only build samples changed since last run and if it's not a fresh build
       if ((config.options['clean-samples'] && watch) || !config.options['clean-samples']) {
         stream = stream.pipe(once({
+          'context': false,
           'file': CACHE_DEST,
         }));
       }
@@ -191,10 +192,7 @@ class SamplesBuilder {
 
       stream.on('end', async () => {
         this._log.success('Built samples.');
-        // Only write samples sitemap if it has been a full samples build
-        if (!watch && config.options['clean-samples'] === true) {
-          this._generateSitemap();
-        }
+        this._generateSitemap();
         resolve();
       });
     });
