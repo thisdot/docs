@@ -33,7 +33,7 @@ if [ -n "$TRAVIS_BUILD_NUMBER" ]; then
   # Unzip all loaded artifacts
   for filename in artifacts/*.zip; do
     [ -e "$filename" ] || continue
-    unzip -o -d . artifacts/$filename.zip
+    unzip -o -q -d . $filename
   done
   echo -e "travis_fold:end:fetch\n"
 fi
