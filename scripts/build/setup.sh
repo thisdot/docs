@@ -34,7 +34,7 @@ cd $root && npm run build:playground
 echo -e "travis_fold:end:playground\n"
 
 # Build samples
-cd $root && node platform/lib/build/samplesBuilder.js --clean-samples
+cd $root && node platform/lib/build/samplesBuilder.js
 
 # Import documents
 cd $root && node platform/lib/pipeline/componentReferenceImporter.js
