@@ -16,7 +16,7 @@
 
 const {spawn} = require('child_process');
 const {Signale} = require('signale');
-const config = require('../config.js');
+const config = require('@lib/config');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');

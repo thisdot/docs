@@ -112,22 +112,6 @@ class Config {
     let podspec = fs.readFileSync(GROW_CONFIG_TEMPLATE_PATH, 'utf-8');
     podspec = yaml.safeLoad(podspec);
 
-    // Check if specific languages have been configured, if not force-enable
-    // all available langauges at least during development
-    if(this.options.locales) {
-      const locales = this.options.locales.split(',');
-      if (!locales.every(locale => AVAILABLE_LOCALES.includes(locale))) {
-        signale.fatal('Invalid set of locales given:', this.options.locales);
-        signale.info('Available locales are', AVAILABLE_LOCALES.join(', '));
-        process.exit(1);
-      }
-
-      podspec.localization.locales = locales;
-      signale.info('Building locales', this.options.locales);
-    } else if (this.isDevMode()) {
-      podspec.localization.locales = AVAILABLE_LOCALES;
-    }
-
     // Add environment specific information to configuration needed for URLs
     podspec['env'] = {
       'name': this.environment,
@@ -160,6 +144,24 @@ class Config {
         'env': podspec['env'],
       },
     };
+
+    podspec.localization.locales = AVAILABLE_LOCALES;
+    // Check if specific languages have been configured to be built
+    if(this.options.locales) {
+      const locales = this.options.locales.split(',');
+      if (!locales.every(locale => AVAILABLE_LOCALES.includes(locale))) {
+        signale.fatal('Invalid set of locales given:', this.options.locales);
+        signale.info('Available locales are', AVAILABLE_LOCALES.join(', '));
+        process.exit(1);
+      }
+
+      podspec.deployments.default['filters'] = {
+        'type': 'whitelist',
+        'locales': locales
+      };
+
+      signale.info('Only building locales', this.options.locales);
+    }
 
     fs.writeFileSync(GROW_CONFIG_DEST, yaml.dump(podspec, {'noRefs': true}));
     signale.success('Configured Grow!');
