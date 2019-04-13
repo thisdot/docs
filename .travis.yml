@@ -26,7 +26,7 @@ stages:
 jobs:
   include:
     - stage: setup
-      name: 'Check, import documents, build samples, Playground & Boilerplate'
+      name: 'Check code, import documents, build samples, playground & boilerplate'
       script: unbuffer ./scripts/build/setup.sh
     - stage: build
       name: 'Build Pages (EN, FR, AR)'

@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the license.
 
-# Exit if one of the below commands fails
 GREEN() { echo -e "\033[1;32m$1\033[0m"; }
 CYAN() { echo -e "\033[1;36m$1\033[0m"; }
 
+# Exit if one of the below commands fails
 set -e
 
 cd $(dirname $0)/../..
