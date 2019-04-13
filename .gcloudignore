@@ -29,6 +29,7 @@ packager/
 /frontend/
 pages/
 !platform/pages
+/artifacts
 
 # playground: ignore everything except the dist folder
 /playground/*

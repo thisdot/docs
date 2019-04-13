@@ -15,9 +15,9 @@
     "lint:node": "eslint \"**/*.js\" --ignore-path ./.gitignore --ignore-pattern \"examples/**/static\"",
     "fix:node": "eslint \"**/*.js\" --fix --ignore-path ./.gitignore",
 
-    "build:local": "NODE_ENV=local ./build.sh",
-    "build:staging": "NODE_ENV=staging ./build.sh",
-    "build:prod": "NODE_ENV=production ./build.sh",
+    "build:local": "./scripts/build/setup.sh && NODE_ENV=local ./scripts/build/pages.sh",
+    "build:staging": "NODE_ENV=staging ./scripts/build/pages.sh",
+    "build:prod": "NODE_ENV=production ./scripts/build/pages.sh",
 
     "build:playground": "cd playground && webpack --config webpack.config.js --mode production --optimize-minimize --progress",
 
@@ -30,8 +30,8 @@
 
     "log:staging": "gcloud app logs tail -s default --project amp-dev-staging",
 
-    "test": "npm-run-all test:* --aggregate-output --parallel",
     "test:playground": "babel-node playground/spec/run.js",
+    "test": "npm-run-all test:* --aggregate-output --parallel",
     "posttest": "npm run lint"
   },
   "keywords": [

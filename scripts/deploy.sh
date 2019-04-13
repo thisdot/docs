@@ -17,27 +17,25 @@
 # Exit if one of the below commands fails
 set -e
 
+cd $(dirname $0)/../..
+
 root=$(pwd)
 args=$*
 
-# Verify a valid NODE_ENV has been set for build
-if [ -z "$NODE_ENV" ]
-then
-  echo "You need to set a valid NODE_ENV variable to build amp.dev!"
-  exit 1
+# Import artifacts from previous build stages if running on Travis
+if [ -n "$TRAVIS_BUILD_NUMBER" ]; then
+  echo "Fetching artifacts (Imported docs, built samples, built pages, ...) from Google Cloud Storage ..."
+  echo -e "travis_fold:start:fetch\n"
+
+  mkdir -p artifacts
+  gsutil rsync -r gs://us.artifacts.amp-dev-staging.appspot.com/travis/$TRAVIS_BUILD_NUMBER/ $root/artifacts/
+
+  # Unzip all loaded artifacts
+  for filename in artifacts/*.zip; do
+    [ -e "$filename" ] || continue
+    unzip -o -d . artifacts/$filename.zip
+  done
+  echo -e "travis_fold:end:fetch\n"
 fi
 
-# Only build boilerplate if configured via --boilerplate
-if [[ $args = *"boilerplate"* ]]
-then
-  echo "Building boilerplate ..."
-  cd $root/boilerplate && node build.js
-fi
-
-# Only build playground if configured via --playground
-if [[ $args = *"playground"* ]]
-then
-  cd $root && npm run build:playground
-fi
-
-cd $root/platform && node build.js --clean-samples $*
+gcloud app deploy --project=amp-dev-staging --quiet

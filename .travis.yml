@@ -9,33 +9,46 @@ cache:
 before_install:
 - openssl aes-256-cbc -K $encrypted_d4a09416a845_key -iv $encrypted_d4a09416a845_iv
   -in .staging.key.json.enc -out .staging.key.json -d
+- gcloud auth activate-service-account --key-file=.staging.key.json
 install:
-  - pip install grow==0.7.4 --user
-  - grow --version
   - npm ci
-
+stages:
+  - setup
+  - build
+  - deploy
 jobs:
   include:
+    - stage: setup
+      name: 'Import documents, build Playground & Boilerplate'
+      script: ./scripts/build/setup.sh
     - stage: build
-      script:
-        - npm run build:staging -- --locales en,fr,ar --playground --boilerplate
-    - stage: build
-      script:
-        - npm run build:staging -- --locales es,it,id
-    - stage: build
-      script:
-        - npm run build:staging -- --locales ja,ko,pt_BR
-    - stage: build
-      script:
-        - npm run build:staging -- --locales ru,tr,zh_CN
-    - stage: deploy
+      name: 'Build Pages (EN, FR, AR)'
       install:
-        - pip install gsutil --user
-
-deploy:
-  provider: gae
-  keyfile: ".staging.key.json"
-  project: amp-dev-staging
-  skip_cleanup: true
-  on:
-    branch: future
+        - npm ci
+        - pip install grow==0.7.4 --user -q -q
+      script:
+        - npm run build:staging -- --locales en
+        # - npm run build:staging -- --locales en,fr,ar
+    # - stage: build
+    #   name: 'Build Pages (ES, IT, ID)'
+    #   install:
+    #     - npm ci
+    #     - pip install grow==0.7.4 --user -q -q
+    #   script:
+    #     - npm run build:staging -- --locales es,it,id
+    # - stage: build
+    #   name: 'Build Pages (JA, KO, PT)'
+    #   install:
+    #     - npm ci
+    #     - pip install grow==0.7.4 --user -q -q
+    #   script:
+    #     - npm run build:staging -- --locales ja,ko,pt_BR
+    # - stage: build
+    #   name: 'Build Pages (RU, TR, CN)'
+    #   install:
+    #     - npm ci
+    #     - pip install grow==0.7.4 --user -q -q
+    #   script:
+    #     - npm run build:staging -- --locales ru,tr,zh_CN
+    - stage: deploy
+      script: ./scripts/build/deploy.sh
