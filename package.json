@@ -9,27 +9,20 @@
   "private": true,
   "scripts": {
     "develop": "cd platform && node build.js",
-
     "lint": "npm-run-all lint:* --aggregate-output --parallel",
     "lint-disabled:grow": "cd platform && node lib/pipeline/growReferenceChecker.js",
     "lint:node": "eslint \"**/*.js\" --ignore-path ./.gitignore --ignore-pattern \"examples/**/static\"",
     "fix:node": "eslint \"**/*.js\" --fix --ignore-path ./.gitignore",
-
     "build:local": "./scripts/build/setup.sh && NODE_ENV=local ./scripts/build/pages.sh",
     "build:staging": "NODE_ENV=staging ./scripts/build/pages.sh",
     "build:prod": "NODE_ENV=production ./scripts/build/pages.sh",
-
     "build:playground": "cd playground && webpack --config webpack.config.js --mode production --optimize-minimize --progress",
-
     "deploy:staging": "gcloud app deploy --project=amp-dev-staging --quiet",
     "deploy:prod": "gcloud app deploy --project=amp-dev-230314 --quiet",
-
     "start:local": "cd platform && NODE_ENV=local node serve.js",
     "start:playground": "cd playground && webpack-dev-server --mode development",
     "start": "cd platform && NODE_ENV=production node serve.js",
-
     "log:staging": "gcloud app logs tail -s default --project amp-dev-staging",
-
     "test:playground": "babel-node playground/spec/run.js",
     "test": "npm-run-all test:* --aggregate-output --parallel",
     "posttest": "npm run lint"
@@ -79,6 +72,7 @@
     "amp-by-example": "0.2.6",
     "amp-toolbox-optimizer": "0.5.2-beta.6",
     "amp-toolbox-runtime-version": "0.2.6",
+    "archiver": "^3.0.0",
     "babel-eslint": "10.0.1",
     "babel-loader": "8.0.5",
     "clean-css": "4.2.1",
@@ -91,6 +85,7 @@
     "eslint": "5.16.0",
     "eslint-config-google": "0.12.0",
     "file-loader": "3.0.1",
+    "file-type": "^10.11.0",
     "google-closure-compiler": "20190325.0.0",
     "got": "9.6.0",
     "gulp": "4.0.0",

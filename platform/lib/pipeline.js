@@ -27,6 +27,7 @@ const config = require('./config');
 const utils = require('@lib/utils');
 const Grow = require('./pipeline/grow');
 const ComponentReferenceImporter = require('./pipeline/componentReferenceImporter');
+const {staticsCollector} = require('@lib/build/staticsCollector');
 const SpecImporter = require('./pipeline/specImporter');
 const {samplesBuilder} = require('./build/samplesBuilder');
 const roadmapImporter = require('./pipeline/roadmapImporter');
@@ -42,21 +43,10 @@ const ICONS_SRC = '../frontend/icons/**/*';
 const ICONS_WATCH_SRC = ICONS_SRC;
 const ICONS_DEST = '../pages/icons';
 const PAGES_DEST = '../platform/pages';
-const STATICS_SRC = ['../pages/static/**/*', '../examples/static/**/*'];
-const STATIC_DEST = '../platform/static';
 
 class Pipeline {
   constructor() {
     signale.await(`Starting pipeline for environment ${config.environment} ...`);
-  }
-
-  /**
-   * Checks that all dependencies needed for the build are met
-   * @return {Promise}
-   */
-  check() {
-    // TODO: Maybe Check node and Grow verison, so long just return a noop promise
-    return Promise.resolve();
   }
 
   /**
@@ -73,7 +63,6 @@ class Pipeline {
       `${TEMPLATES_DEST}/views`,
 
       PAGES_DEST,
-      STATIC_DEST,
     ], {'force': true});
   }
 
@@ -83,7 +72,10 @@ class Pipeline {
    * @return {Promise}
    */
   collectStatics() {
-    return this._collect('static files', STATICS_SRC, STATIC_DEST);
+    staticsCollector.start();
+    if (config.isDevMode()) {
+      staticsCollector.watch();
+    }
   }
 
   /**
@@ -105,7 +97,6 @@ class Pipeline {
     gulp.watch(TEMPLATES_WATCH_SRC, this._collectTemplates.bind(this));
     gulp.watch(ICONS_WATCH_SRC, this._collectIcons.bind(this));
     gulp.watch(TRANSPILE_SCSS_WATCH_SRC, this._transpileScss.bind(this));
-    gulp.watch(STATICS_SRC, this.collectStatics.bind(this));
   }
 
   _transpileScss() {
@@ -242,15 +233,6 @@ class Pipeline {
         resolve();
       });
     });
-  }
-
-  /**
-   * Validates the built release
-   * @return {undefined}
-   */
-  async testBuild() {
-    // TODO: Run AMP validator over generated pages
-    signale.warn('Testing of build is not yet implemented!');
   }
 };
 

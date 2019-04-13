@@ -35,8 +35,6 @@ pipeline.clean();
 (async () => {
   signale.time('Pipeline');
 
-  await pipeline.check();
-
   // Collection of static files does not need to be waited for as it happens
   // real quick and no other task depends on them
   pipeline.collectStatics();
@@ -59,7 +57,7 @@ pipeline.clean();
     }
   }
 
-  // // Create sample sources which get used while generating the pages
+  // Create sample sources which get used while generating the pages
   await pipeline.buildSamples();
 
   // Generate pages does not statically build the pages for development
@@ -70,7 +68,6 @@ pipeline.clean();
   // and tested to ensure it is working
   if (!config.isDevMode()) {
     await pipeline.optimizeBuild();
-    await pipeline.testBuild();
   }
 
   signale.timeEnd('Pipeline');
