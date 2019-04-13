@@ -38,6 +38,9 @@ if [ -n "$TRAVIS_BUILD_NUMBER" ]; then
   echo -e "travis_fold:end:fetch\n"
 fi
 
+# Collect static files as they haven't been needed for the build itself
+node $root/platform/lib/build/staticsCollector.js
+
 # Persist Travis information in config to identify build via /who-am-i
 if [ -n "$TRAVIS_BUILD_NUMBER" ]; then
   sed -i -e "s/TRAVIS_BUILD_NUMBER/${TRAVIS_BUILD_NUMBER}/g" $root/platform/config/build-info.yaml
