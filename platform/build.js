@@ -35,9 +35,11 @@ pipeline.clean();
 (async () => {
   signale.time('Pipeline');
 
-  // Collection of static files does not need to be waited for as it happens
-  // real quick and no other task depends on them
-  pipeline.collectStatics();
+  // Collect static files only for development, will be collected by deploy.sh
+  // for other environments
+  if (config.isDevMode()) {
+    pipeline.collectStatics();
+  }
 
   await pipeline.buildFrontend();
 
