@@ -41,7 +41,7 @@ const AVAILABLE_LOCALES = [
   'ru',
   'tr',
   'zh_CN',
-]
+];
 
 class Config {
   constructor(environment = ENV_DEV) {
@@ -147,9 +147,9 @@ class Config {
 
     podspec.localization.locales = AVAILABLE_LOCALES;
     // Check if specific languages have been configured to be built
-    if(this.options.locales) {
+    if (this.options.locales) {
       const locales = this.options.locales.split(',');
-      if (!locales.every(locale => AVAILABLE_LOCALES.includes(locale))) {
+      if (!locales.every((locale) => AVAILABLE_LOCALES.includes(locale))) {
         signale.fatal('Invalid set of locales given:', this.options.locales);
         signale.info('Available locales are', AVAILABLE_LOCALES.join(', '));
         process.exit(1);
@@ -157,7 +157,7 @@ class Config {
 
       podspec.deployments.default['filters'] = {
         'type': 'whitelist',
-        'locales': locales
+        'locales': locales,
       };
 
       signale.info('Only building locales', this.options.locales);

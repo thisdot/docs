@@ -3,6 +3,13 @@ node_js:
   - lts/*
 git:
   depth: 3
+addons:
+  apt:
+    packages:
+      # Needed hack to have colored output, see: travis-ci/travis-ci/#7967
+      # This intstalls unbuffer which reenables colored output for builds
+      # with secret environment variables
+      - expect-dev
 cache:
   - pip
   - npm
@@ -19,15 +26,15 @@ stages:
 jobs:
   include:
     - stage: setup
-      name: 'Import documents, build Playground & Boilerplate'
-      script: ./scripts/build/setup.sh
+      name: 'Check, import documents, build samples, Playground & Boilerplate'
+      script: unbuffer ./scripts/build/setup.sh
     - stage: build
       name: 'Build Pages (EN, FR, AR)'
       install:
         - npm ci
         - pip install grow==0.7.4 --user -q -q
       script:
-        - npm run build:staging -- --locales en
+        - unbuffer npm run build:staging -- --locales en
         # - npm run build:staging -- --locales en,fr,ar
     # - stage: build
     #   name: 'Build Pages (ES, IT, ID)'
@@ -51,4 +58,4 @@ jobs:
     #   script:
     #     - npm run build:staging -- --locales ru,tr,zh_CN
     - stage: deploy
-      script: ./scripts/deploy.sh
+      script: unbuffer ./scripts/deploy.sh

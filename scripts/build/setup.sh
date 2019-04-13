@@ -15,6 +15,9 @@
 # limitations under the license.
 
 # Exit if one of the below commands fails
+GREEN() { echo -e "\033[1;32m$1\033[0m"; }
+CYAN() { echo -e "\033[1;36m$1\033[0m"; }
+
 set -e
 
 cd $(dirname $0)/../..
@@ -22,28 +25,55 @@ cd $(dirname $0)/../..
 root=$(pwd)
 args=$*
 
-# Build boilerplate and playground ...
+# Linting platform code
+echo $(CYAN "Linting node ...")
+echo -e "travis_fold:start:lint-node\n"
+cd $root && npm run lint:node
+echo -e "travis_fold:end:lint-node\n"
+echo $(GREEN "Linted node!")
+
+# Build boilerplate
+echo $(CYAN "Building boilerplate generator ...")
 echo "Building boilerplate ..."
 echo -e "travis_fold:start:boilerplate\n"
 cd $root/boilerplate && node build.js
 echo -e "travis_fold:end:boilerplate\n"
+echo $(GREEN "Built boilerplate generator!")
 
-echo "Building playground ..."
+# Build playground
+echo $(CYAN "Building playground ...")
 echo -e "travis_fold:start:playground\n"
 cd $root && npm run build:playground
 echo -e "travis_fold:end:playground\n"
+echo $(GREEN "Built playground!")
 
 # Build samples
+echo $(CYAN "Building samples ...")
+echo -e "travis_fold:start:samples\n"
 cd $root && node platform/lib/build/samplesBuilder.js
+echo -e "travis_fold:end:samples\n"
+echo $(GREEN "Built samples!")
 
 # Import documents
+echo $(CYAN "Importing documents ...")
+echo -e "travis_fold:start:import\n"
 cd $root && node platform/lib/pipeline/componentReferenceImporter.js
 cd $root && node platform/lib/pipeline/specImporter.js
 cd $root && node platform/lib/pipeline/roadmapImporter.js
+echo -e "travis_fold:end:import\n"
+echo $(GREEN "Imported documents!")
+
+# Checking for broken references in Grow can only be done after samples have
+# been built and all documents have been imported
+echo $(CYAN "Checking document references ...")
+echo -e "travis_fold:start:lint-grow\n"
+cd $root && npm run lint:node
+echo -e "travis_fold:end:lint-grow\n"
+echo $(GREEN "Checked document references!")
 
 # Store new (built or imported) data in GCS if on Traivs
 if [ -n "$TRAVIS_BUILD_NUMBER" ]; then
-  echo "Storing artifacts in Google Cloud Storage ..."
+  echo $(CYAN "Storing artifacts in Google Cloud Storage ...")
   echo -e "travis_fold:start:store\n"
   cd $root
   mkdir -p artifacts

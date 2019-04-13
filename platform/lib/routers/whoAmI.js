@@ -29,7 +29,7 @@ const whoAmI = express.Router();
 
 const info = {
   'environment': config.environment,
-  'build': yaml.safeLoad(fs.readFileSync(BUILD_INFO_PATH, 'utf8'))
+  'build': yaml.safeLoad(fs.readFileSync(BUILD_INFO_PATH, 'utf8')),
 };
 
 whoAmI.get('/', (request, response) => {

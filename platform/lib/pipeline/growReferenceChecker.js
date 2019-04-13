@@ -79,9 +79,16 @@ class GrowReferenceChecker {
       stream.pipe(gulp.dest('./'));
 
       stream.on('end', () => {
-        this._log.complete(`Finished fixing. A total of ${this._brokenReferencesCount} had ` +
-        `errors. ${this._unfindableDocuments.length + Object.keys(this._multipleMatches).length}` +
-        'still have.');
+        if (Object.keys(this._multipleMatches).length == 0
+            && this._unfindableDocuments.length == 0) {
+          this._log.success('All references intact!');
+          process.exit(0);
+        }
+
+        this._log.complete('Finished automatic fixing.');
+        this._log.complete(`A total of ${this._brokenReferencesCount} had ` +
+          `errors. ${this._unfindableDocuments.length +
+           Object.keys(this._multipleMatches).length}` + 'still have.');
 
         if (this._unfindableDocuments.length) {
           this._log.info(`Could not automatically fix ${this._unfindableDocuments.length} ` +
