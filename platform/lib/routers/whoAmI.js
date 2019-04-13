@@ -18,17 +18,23 @@
 
 const express = require('express');
 const config = require('../config.js');
+const yaml = require('js-yaml');
+const fs = require('fs');
+const utils = require('@lib/utils');
+
+const BUILD_INFO_PATH = utils.project.absolute('platform/config/build-info.yaml');
 
 // eslint-disable-next-line new-cap
 const whoAmI = express.Router();
 
-whoAmI.get('/', (request, response) => {
-  const whoAmI = {
-    'environment': config.environment,
-  };
+const info = {
+  'environment': config.environment,
+  'build': yaml.safeLoad(fs.readFileSync(BUILD_INFO_PATH, 'utf8'))
+};
 
+whoAmI.get('/', (request, response) => {
   response.setHeader('Content-Type', 'application/json');
-  response.status(200).send(JSON.stringify(whoAmI));
+  response.status(200).send(JSON.stringify(info, null, 2));
 });
 
 module.exports = whoAmI;
