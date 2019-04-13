@@ -158,8 +158,6 @@ class PageMinifier {
         this._log.warn(`Could not rewrite selectors for ${path}`);
         console.error(e);
       }
-    } else {
-      this._log.info(`Skipping ${path} from selector rewriting!`);
     }
 
     return html;
@@ -232,8 +230,6 @@ class PageMinifier {
     hash = hash.digest('base64');
 
     if (!this._minifiedCssCache[hash]) {
-      this._log.info(`Caching CSS bundle with ${hash}`);
-
       this._minifiedCssCache[hash] = this._cleanCss.minify(css).styles;
     }
 
