@@ -18,16 +18,16 @@ jobs:
   include:
     - stage: build
       script:
-        - ./build.sh --locales en,fr,ar --playground --boilerplate
+        - npm run build:staging -- --locales en,fr,ar --playground --boilerplate
     - stage: build
       script:
-        - ./build.sh --locales es,it,id
+        - npm run build:staging -- --locales es,it,id
     - stage: build
       script:
-        - ./build.sh --locales ja,ko,pt_BR
+        - npm run build:staging -- --locales ja,ko,pt_BR
     - stage: build
       script:
-        - ./build.sh --locales ru,tr,zh_CN
+        - npm run build:staging -- --locales ru,tr,zh_CN
     - stage: deploy
       install:
         - pip install gsutil --user
