@@ -28,6 +28,20 @@ const GROW_OUT_DIR = utils.project.absolute('platform/pages');
 
 const ENV_DEV = 'development';
 const ENV_PROD = 'production';
+const AVAILABLE_LOCALES = [
+  'en',
+  'fr',
+  'ar',
+  'es',
+  'it',
+  'id',
+  'ja',
+  'ko',
+  'pt_BR',
+  'ru',
+  'tr',
+  'zh_CN',
+]
 
 class Config {
   constructor(environment = ENV_DEV) {
@@ -98,22 +112,20 @@ class Config {
     let podspec = fs.readFileSync(GROW_CONFIG_TEMPLATE_PATH, 'utf-8');
     podspec = yaml.safeLoad(podspec);
 
-    // Force-enable all languages during development
-    if (this.isDevMode()) {
-      podspec.localization.locales = [
-        'en',
-        'fr',
-        'ar',
-        'es',
-        'it',
-        'id',
-        'ja',
-        'ko',
-        'pt_BR',
-        'ru',
-        'tr',
-        'zh_CN',
-      ];
+    // Check if specific languages have been configured, if not force-enable
+    // all available langauges at least during development
+    if(this.options.locales) {
+      const locales = this.options.locales.split(',');
+      if (!locales.every(locale => AVAILABLE_LOCALES.includes(locale))) {
+        signale.fatal('Invalid set of locales given:', this.options.locales);
+        signale.info('Available locales are', AVAILABLE_LOCALES.join(', '));
+        process.exit(1);
+      }
+
+      podspec.localization.locales = locales;
+      signale.info('Building locales', this.options.locales);
+    } else if (this.isDevMode()) {
+      podspec.localization.locales = AVAILABLE_LOCALES;
     }
 
     // Add environment specific information to configuration needed for URLs
