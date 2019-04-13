@@ -34,7 +34,6 @@ echo $(GREEN "Linted node!")
 
 # Build boilerplate
 echo $(CYAN "Building boilerplate generator ...")
-echo "Building boilerplate ..."
 echo -e "travis_fold:start:boilerplate\n"
 cd $root/boilerplate && node build.js
 echo -e "travis_fold:end:boilerplate\n"
