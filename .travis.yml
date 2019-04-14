@@ -28,33 +28,45 @@ jobs:
     - stage: setup
       name: 'Check code, import documents, build samples, playground & boilerplate'
       script: unbuffer ./scripts/build/setup.sh
-    - stage: build
-      name: 'Build Pages (EN, FR, AR)'
+    - &build
+      stage: build
       install:
         - npm ci
         - pip install grow==0.7.4 --user
-      script:
-        - unbuffer npm run build:staging -- --locales en,fr,ar
-    - stage: build
-      name: 'Build Pages (ES, IT, ID)'
-      install:
-        - npm ci
-        - pip install grow==0.7.4 --user
-      script:
-        - unbuffer npm run build:staging -- --locales es,it,id
-    - stage: build
-      name: 'Build Pages (JA, KO, PT)'
-      install:
-        - npm ci
-        - pip install grow==0.7.4 --user
-      script:
-        - unbuffer npm run build:staging -- --locales ja,ko,pt_BR
-    - stage: build
-      name: 'Build Pages (RU, TR, CN)'
-      install:
-        - npm ci
-        - pip install grow==0.7.4 --user
-      script:
-        - unbuffer npm run build:staging -- --locales ru,tr,zh_CN
+      name: 'Build Pages (EN)'
+      script: unbuffer npm run build:staging -- --locales en
+    - <<: *build
+      name: 'Build Pages (FR)'
+      script: unbuffer npm run build:staging -- --locales fr
+    - <<: *build
+      name: 'Build Pages (AR)'
+      script: unbuffer npm run build:staging -- --locales ar
+    - <<: *build
+      name: 'Build Pages (ES)'
+      script: unbuffer npm run build:staging -- --locales es
+    - <<: *build
+      name: 'Build Pages (IT)'
+      script: unbuffer npm run build:staging -- --locales it
+    - <<: *build
+      name: 'Build Pages (ID)'
+      script: unbuffer npm run build:staging -- --locales id
+    - <<: *build
+      name: 'Build Pages (JA)'
+      script: unbuffer npm run build:staging -- --locales ja
+    - <<: *build
+      name: 'Build Pages (ko)'
+      script: unbuffer npm run build:staging -- --locales ko
+    - <<: *build
+      name: 'Build Pages (BR)'
+      script: unbuffer npm run build:staging -- --locales pt_BR
+    - <<: *build
+      name: 'Build Pages (RU)'
+      script: unbuffer npm run build:staging -- --locales ru
+    - <<: *build
+      name: 'Build Pages (TR)'
+      script: unbuffer npm run build:staging -- --locales tr
+    - <<: *build
+      name: 'Build Pages (CN)'
+      script: unbuffer npm run build:staging -- --locales zh_CN
     - stage: deploy
       script: unbuffer ./scripts/deploy.sh
