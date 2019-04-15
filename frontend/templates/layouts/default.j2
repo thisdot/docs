@@ -1,3 +1,14 @@
+{% macro filter(formats='websites, ads, stories, email') -%}
+{% if not formats.strip() %}
+{{ caller() }}
+{% else %}
+{% set formats = formats.split(',') %}
+<div class="{% for format in formats %}ap--{{ format.strip() }} {% endfor %}">
+{{ caller() }}
+</div>
+{% endif %}
+{%- endmacro %}
+
 {% macro tip(title, type='note') -%}
 {% with %}
 {% set text = caller() %}
@@ -24,7 +35,6 @@
     {% block head %}
     <meta charset="utf-8"/>
     <script async src="https://cdn.ampproject.org/v0.js"></script>
-    <title>{{ doc.title }}</title>
     {% if podspec.env.name == 'development' %}
     <link rel="shortcut icon" href="/static/img/favicon-local.png"/>
     {% else %}

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from grow import extensions
 
 # Monkey patch grow.url before doing anything else
 from grow.common import urls
@@ -13,15 +14,11 @@ class AmpDevUrl(urls._Url):
 
 urls.Url = AmpDevUrl
 
-import os
-import pkgutil
-import sys
-import types
-
 from grow import extensions
 from grow.documents import document, document_format, static_document
 from grow.extensions import hooks
 
+from .markdown_extras import block_filter as BlockFilter
 from .markdown_extras import block_tip as BlockTip
 from .markdown_extras import block_video as BlockVideo
 from .markdown_extras import inline_tip as InlineTip
@@ -64,6 +61,7 @@ class AmpDevExtension(extensions.BaseExtension):
         content = InlineTip.trigger(original_body, content)
         content = BlockTip.trigger(original_body, content)
         content = BlockVideo.trigger(original_body, content)
+        content = BlockFilter.trigger(original_body, content)
         return content
 
     @property
