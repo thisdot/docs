@@ -5,7 +5,6 @@
 
 {# Tests if one of the top level navigation items needs to be active #}
 {% macro active_class(search_path) -%}
-<!-- {{ search_path}} {{ doc.pod_path }} -->
 {% if doc.pod_path.startswith(search_path) %}ap-m-nav-link-active{% endif %}
 {%- endmacro %}
 
