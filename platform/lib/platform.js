@@ -95,6 +95,21 @@ class Platform {
       res.redirect('https://' + req.hostname + req.path);
     });
 
+    // debug computing times
+    this.server.use((req, res, next) => {
+      const timeStart = process.hrtime();
+
+      res.on('finish', () => {
+        const timeElapsed = process.hrtime(timeStart);
+        let seconds = (timeElapsed[0] * 1000 + timeElapsed[1] / 1e6) / 1000;
+        seconds = seconds.toFixed(3);
+        const prefix = seconds > 1 ? 'CRITICAL_TIMING' : 'TIMING';
+        console.log(`[${prefix}]: ${req.url}: ${seconds}s`);
+      });
+
+      next();
+    });
+
     // pass app engine HTTPS status to express app
     this.server.set('trust proxy', true);
     this._enableCors();
@@ -126,7 +141,10 @@ class Platform {
 
   _registerRouters() {
     this.server.use(routers.packager);
-    this.server.get(HEALTH_CHECK, (req, res) => res.status(200).send('OK'));
+    this.server.get(HEALTH_CHECK, (req, res) => {
+      console.log('[HEALTH CHECK] OK');
+      res.status(200).send('OK');
+    });
     this.server.use('/who-am-i', routers.whoAmI);
     this.server.use(subdomain.map(config.hosts.playground, routers.playground));
     this.server.use(subdomain.map(config.hosts.go, routers.go));

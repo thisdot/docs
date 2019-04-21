@@ -27,6 +27,11 @@ const {shouldAddReferrerNotification, addReferrerNotification} =
   require('@lib/common/referrerNotification');
 const fs = require('fs');
 const readFileAsync = promisify(fs.readFile);
+const LRU = require('lru-cache');
+const cache = new LRU({
+  max: 100,
+});
+
 
 // eslint-disable-next-line new-cap
 const pages = express.Router();
@@ -160,7 +165,7 @@ if (config.isDevMode()) {
     }
   });
 
-  pages.get('/*', async (request, response, next) => {
+  pages.use('/*', async (request, response, next) => {
     request.url = ensureFileExtension(request.path);
 
     // Check if there is a manually filtered variant of the requested page
@@ -207,7 +212,7 @@ if (!config.isDevMode()) {
     return true;
   }
 
-  pages.use('/', async (request, response, next) => {
+  pages.get('/*', async (request, response, next) => {
     let requestPath = ensureFileExtension(request.path);
 
     const hasFormatFilter = await shouldApplyFormatFilter(request, requestPath);
@@ -216,6 +221,14 @@ if (!config.isDevMode()) {
     // Let the built-in middleware deal with unfiltered requests
     if (!hasFormatFilter && !hasReferrerNotification) {
       return staticMiddleware(request, response, next);
+    }
+    const cacheKey = requestPath + '?' +
+      Object.entries(request.query).map(([key, value]) => `${key}=${value}`).join('&');
+    const page = cache.get(cacheKey);
+    if (page) {
+      console.log('[CACHE] hit', cacheKey);
+      response.send(page);
+      return;
     }
 
     // Apply format and referrer transformations
@@ -240,8 +253,10 @@ if (!config.isDevMode()) {
       }
       page = fixCheerio(dom.html());
       response.send(page);
+      cache.set(cacheKey, page);
+      console.log('cache count', cache.itemCount);
     } catch (e) {
-      if (e.code === 'EISDIR') {
+      if (e.code === 'EISDIR' || e.code === 'ENOENT') {
         // show a 404 instead
         next();
         return;

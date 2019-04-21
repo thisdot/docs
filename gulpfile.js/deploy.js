@@ -47,6 +47,7 @@ const config = {
     group: `ig-${PREFIX}`,
     template: `it-${PREFIX}-${TAG}`,
     count: 2,
+    machine: 'n1-standard-2',
   },
   gcloud: {
     project: PROJECT_ID,
@@ -89,6 +90,13 @@ function imageBuild() {
 }
 
 /**
+ * Builds a local docker image for testing.
+ */
+function imageRunLocal() {
+  return sh(`docker run -d -p 8082:80 ${config.image.current}`);
+}
+
+/**
  * Builds and uploads a docker image to Google Cloud Container Registry.
  */
 function imageUpload() {
@@ -108,6 +116,7 @@ function imageList() {
 function instanceTemplateCreate() {
   return sh(`gcloud compute instance-templates create-with-container ${config.instance.template} \
                  --container-image ${config.image.current} \
+                 --machine-type ${config.instance.machine} \
                  --tags http-server,https-server`);
 }
 
@@ -154,9 +163,10 @@ function updateStop() {
 exports.verifyTag = verifyTag;
 exports.gcloudSetup = gcloudSetup;
 exports.deploy = series(verifyTag, imageUpload, instanceTemplateCreate, updateStart);
-exports.imageList = imageList;
-exports.imageUpload = imageUpload;
 exports.imageBuild = imageBuild;
+exports.imageList = imageList;
+exports.imageRunLocal = imageRunLocal;
+exports.imageUpload = imageUpload;
 exports.updateStop = updateStop;
 exports.updateStatus = updateStatus;
 exports.updateStart = updateStart;
