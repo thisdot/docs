@@ -27,6 +27,9 @@ const crypto = require('crypto');
 const rcs = require('rcs-core');
 const ampOptimizer = require('amp-toolbox-optimizer');
 const runtimeVersionPromise = require('amp-toolbox-runtime-version').currentVersion();
+const {filterPage, isFilterableRoute, FORMATS} = require('@lib/common/filteredPage');
+const cheerio = require('cheerio');
+const fs = require('fs');
 
 const config = require('@lib/config');
 
@@ -65,7 +68,7 @@ const SELECTOR_REWRITE_SAFE = [
 const SELECTOR_REWRITE_EXCLUDED_PATHS =
   /\/documentation\/examples.*|\/documentation\/components\.html/;
 
-class PageMinifier {
+class PageTransformer {
   constructor() {
     this._log = new Signale({
       'interactive': false,
@@ -107,7 +110,7 @@ class PageMinifier {
           let html = canonicalPage.contents.toString();
           html = scope.minifyPage(html, canonicalPage.path);
 
-          const ampPath = canonicalPage.relative.replace('.html', '.amp.html');
+          const ampPath = canonicalPage.path.replace('.html', '.amp.html');
           const optimizedHtml = await scope.optimize(html, ampPath);
 
           const ampPage = canonicalPage.clone();
@@ -116,14 +119,107 @@ class PageMinifier {
           canonicalPage.contents = Buffer.from(optimizedHtml);
           ampPage.contents = Buffer.from(html);
 
-          this.push(canonicalPage);
-          this.push(ampPage);
+          let filteredPages = [];
+          if (isFilterableRoute(canonicalPage.path)) {
+            filteredPages = scope._filterPages(canonicalPage, ampPage);
+          }
 
+          for (const page of [canonicalPage, ampPage, ...filteredPages]) {
+            this.push(page);
+          }
+
+          scope._log.success(`Transformed ${canonicalPage.path}`);
           callback();
         }))
         .pipe(gulp.dest('./'));
   }
 
+
+  /**
+   * Verifies a given page should be filtered
+   *
+   * @param  {Vinyl}
+   * @return {undefined}
+   */
+  _isManuallyFiltered(page) {
+    let path = page.path.replace('.amp.html', '.html');
+
+    // Skip pages that have been manually filtered and therefore have a path like
+    // - guides-and-tutorials/index.websites.html
+    // - guides-and-tutorials/index.email.amp.html
+    // But still the matching format should be filtered, therefore pass it back
+    const format = path.match(/\.(websites|stories|ads|email)(\.amp)?\.html/);
+    if (format) {
+      return format[1];
+    }
+
+    // Do not filter pages that have a manually filtered equivalent as they
+    // are also somewhere in the stream and shouldn't be overwritten
+    path = path.replace('.html', `.${format}.html`);
+    if (fs.existsSync(path)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
+   * Filters the given pages by the formats defined in data-available-formats
+   *
+   * @param  {Array} ...pages
+   * @return {Array}
+   */
+  _filterPages(...pages) {
+    const filteredPages = [];
+    for (const page of pages) {
+      const html = page.contents.toString();
+      const manualFormat = this._isManuallyFiltered(page);
+      if (manualFormat) {
+        const filteredHtml = this.filterHtml(html, manualFormat, true);
+        page.contents = Buffer.from(filteredHtml);
+        continue;
+      }
+
+      for (const format of FORMATS) {
+        const filteredHtml = this.filterHtml(html, format);
+        if (filteredHtml) {
+          const filteredPage = page.clone();
+          filteredPage.contents = Buffer.from(filteredHtml);
+
+          // As websites is the default those files can be overwritten and
+          // don't need an extra name
+          if (format !== 'websites') {
+            filteredPage.stem = filteredPage.stem.replace('.', `.${format}.`);
+          }
+
+          filteredPages.push(filteredPage);
+        }
+      }
+    }
+
+    return filteredPages;
+  }
+
+  /**
+   * @param  {String} html
+   * @return {String}
+   */
+  filterHtml(html, format, force) {
+    const dom = cheerio.load(html);
+    if (filterPage(format, dom, force)) {
+      let filteredHtml = dom.html();
+
+      // As cheerio has problems with XML syntax in HTML documents the
+      // markup for the icons needs to be restored
+      filteredHtml = filteredHtml.replace(
+        'xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink"',
+        'xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"');
+      filteredHtml = filteredHtml.replace(
+        /xlink="http:\/\/www\.w3\.org\/1999\/xlink" href=/gm,
+        'xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href=');
+      return filteredHtml;
+    }
+  }
 
   async optimize(html, path) {
     const ampRuntimeVersion = await runtimeVersionPromise;
@@ -239,11 +335,11 @@ class PageMinifier {
 
 if (!module.parent) {
   (async () => {
-    const pageMinifier = new PageMinifier();
-    pageMinifier.start(__dirname + '/../../pages');
+    const pageTransformer = new PageTransformer();
+    pageTransformer.start(__dirname + '/../../pages');
   })();
 }
 
 module.exports = {
-  pageMinifier: new PageMinifier(),
+  pageTransformer: new PageTransformer(),
 };
