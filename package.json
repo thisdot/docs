@@ -40,7 +40,8 @@
   "_moduleAliases": {
     "@examples": "examples",
     "@boilerplate": "boilerplate",
-    "@lib": "platform/lib"
+    "@lib": "platform/lib",
+    "@tasks": "gulpfile.js"
   },
   "dependencies": {
     "amp-toolbox-cors": "0.2.4",
