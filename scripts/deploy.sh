@@ -43,10 +43,10 @@ node $root/platform/lib/build/staticsCollector.js
 
 # Persist Travis information in config to identify build via /who-am-i
 if [ -n "$TRAVIS_BUILD_NUMBER" ]; then
-  sed -i -e "s/TRAVIS_BUILD_NUMBER/${TRAVIS_BUILD_NUMBER}/g" $root/platform/config/build-info.yaml
-  sed -i -e "s/TRAVIS_COMMIT_MESSAGE/${TRAVIS_COMMIT_MESSAGE}/g" $root/platform/config/build-info.yaml
-  sed -i -e "s/TRAVIS_COMMIT/${TRAVIS_COMMIT}/g" $root/platform/config/build-info.yaml
-  sed -i -e "s/NOW/$(date +"%Y-%m-%d %H:%M:%S %Z")/g" $root/platform/config/build-info.yaml
+  # sed -i -e "s/TRAVIS_BUILD_NUMBER/${TRAVIS_BUILD_NUMBER}/g" $root/platform/config/build-info.yaml
+  # sed -i -e "s/TRAVIS_COMMIT_MESSAGE/${TRAVIS_COMMIT_MESSAGE}/g" $root/platform/config/build-info.yaml
+  # sed -i -e "s/TRAVIS_COMMIT/${TRAVIS_COMMIT}/g" $root/platform/config/build-info.yaml
+  # sed -i -e "s/NOW/$(date +"%Y-%m-%d %H:%M:%S %Z")/g" $root/platform/config/build-info.yaml
 fi
 
 gcloud app deploy --project=amp-dev-staging --quiet
