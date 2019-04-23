@@ -192,7 +192,7 @@ class SamplesBuilder {
 
       stream.on('end', async () => {
         this._log.success('Built samples.');
-        this._generateSitemap();
+        await this._generateSitemap();
         resolve();
       });
     });
@@ -314,7 +314,7 @@ class SamplesBuilder {
       }
     }
 
-    writeFileAsync(SITEMAP_DEST, JSON.stringify(this._sitemap)).then(() => {
+    return writeFileAsync(SITEMAP_DEST, JSON.stringify(this._sitemap)).then(() => {
       this._log.success('Wrote sample sitemap.');
     });
   }
