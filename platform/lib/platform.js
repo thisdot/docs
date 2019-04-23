@@ -104,7 +104,7 @@ class Platform {
         let seconds = (timeElapsed[0] * 1000 + timeElapsed[1] / 1e6) / 1000;
         seconds = seconds.toFixed(3);
         const prefix = seconds > 1 ? 'CRITICAL_TIMING' : 'TIMING';
-        console.log(`[${prefix}]: ${req.url}: ${seconds}s`);
+        console.log(`[${prefix}] ${req.get('host')}${req.url} ${seconds}s [${res.statusCode}]`);
       });
 
       next();
@@ -163,7 +163,7 @@ class Platform {
     // handle errors
     this.server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
       if (err) {
-        console.error(err.stack);
+        console.log(err);
         res.status(500).sendFile('500.html', {root: pagePath()});
       }
     });
