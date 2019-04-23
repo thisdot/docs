@@ -19,8 +19,8 @@
 const express = require('express');
 const config = require('@lib/config');
 const {Signale} = require('signale');
-const utils = require('@lib/utils');
 const {isFilterableRoute} = require('@lib/common/filteredPage');
+const {project} = require('@lib/utils');
 
 
 // eslint-disable-next-line new-cap
@@ -160,8 +160,7 @@ if (config.isDevMode()) {
 }
 
 if (!config.isDevMode()) {
-  const STATIC_PAGES_PATH = utils.project.absolute('platform/pages');
-  const staticMiddleware = express.static(STATIC_PAGES_PATH, {
+  const staticMiddleware = express.static(project.paths.PAGES_DEST, {
     'extensions': ['html'],
   });
 
