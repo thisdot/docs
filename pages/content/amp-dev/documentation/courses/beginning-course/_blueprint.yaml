@@ -3,7 +3,7 @@ $path: /documentation/courses/beginning-course/{base}.html
 $localization:
   path: /{locale}/documentation/courses/beginning-course/{base}.html
 $title@: Beginning Course
-$order: 2
+$order: 3
 toc: false
 
 chaptered: true
